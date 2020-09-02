@@ -244,7 +244,7 @@ app.post("/getWord", function (req, res) {
   var user = req.body;
   //   var query = "CALL login ('" + user.username + "','" + user.password + "')";
   var query = "select * from `Dictionary` where word='" + user.word + "'";
-  con.query(query, [user.c], (err, rows, fields) => {
+  con.query(query, [user.word], (err, rows, fields) => {
     if (!err) {
       res.send(rows);
     } else {
@@ -252,11 +252,10 @@ app.post("/getWord", function (req, res) {
     }
   });
 });
-app.get("/getAllWords", function (req, res) {
+app.post("/getAllWords", function (req, res) {
   var user = req.body;
-  //   var query = "CALL login ('" + user.username + "','" + user.password + "')";
-  var query = "select * from `Dictionary`";
-  con.query(query, [user.c], (err, rows, fields) => {
+  var query = "call limitPage(?,?)";
+  con.query(query, [user.limit, user.page], (err, rows, fields) => {
     if (!err) {
       res.send(rows);
     } else {
